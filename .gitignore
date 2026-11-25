@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.py[cod]
+venv/
+.venv/
+
+# Local databases and data exports
+*.sqlite3
+backup.json
+analytics_output/
+
+# Local secrets and environment files
+.env
+.env.*
+!.env.example
+
+# Django generated files
+staticfiles/
+media/

@@ -1,0 +1,26 @@
+{% load static %}
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{% block title %}FoodShare India{% endblock %}</title>
+<link href="{% static 'core/bootstrap.min.css' %}" rel="stylesheet">
+<style>body{background:#f2f6f1}.navbar{background:#1f5a3f}.btn-success{--bs-btn-bg:#1f5a3f;--bs-btn-border-color:#1f5a3f;--bs-btn-hover-bg:#17452f}h1,h2,h3{font-weight:700}.stat b{font-size:1.9rem;color:#1f5a3f;display:block}</style>
+</head><body>
+<nav class="navbar navbar-expand-md navbar-dark"><div class="container">
+<a class="navbar-brand fw-bold" href="{% url 'home' %}">FoodShare India</a>
+<button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#nv" aria-label="Menu"><span class="navbar-toggler-icon"></span></button>
+<div class="collapse navbar-collapse" id="nv"><ul class="navbar-nav me-auto">
+<li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Food board</a></li>
+{% if user.is_authenticated and user.role == 'donor' %}<li class="nav-item"><a class="nav-link" href="{% url 'donor_desk' %}">Donate food</a></li>{% endif %}
+{% if user.is_authenticated and user.role == 'ngo' %}<li class="nav-item"><a class="nav-link" href="{% url 'ngo_desk' %}">NGO desk</a></li>{% endif %}
+<li class="nav-item"><a class="nav-link" href="{% url 'dashboard' %}">Analytics</a></li>
+<li class="nav-item"><a class="nav-link" href="{% url 'safety' %}">Food safety</a></li></ul>
+<div class="d-flex align-items-center gap-2 text-white">
+{% if user.is_authenticated %}<span class="small">Hi, {{ user.display_name }} ({{ user.get_role_display|truncatechars:5 }}){% if user.role == 'ngo' and not user.verified %} · pending{% endif %}</span>
+<form method="post" action="{% url 'logout' %}">{% csrf_token %}<button class="btn btn-sm btn-outline-light">Log out</button></form>
+{% else %}<a class="btn btn-sm btn-outline-light" href="{% url 'login' %}">Log in</a><a class="btn btn-sm btn-warning" href="{% url 'signup' %}">Sign up</a>{% endif %}
+</div></div></div></nav>
+<main class="container py-4">
+{% for m in messages %}<div class="alert alert-{% if m.tags == 'error' %}danger{% else %}{{ m.tags }}{% endif %}">{{ m }}</div>{% endfor %}
+{% block content %}{% endblock %}</main>
+<footer class="container py-3 text-muted small border-top">FoodShare India · Save food, share food. Food is handed over directly between donor and NGO; follow FSSAI guidance.</footer>
+<script src="{% static 'core/bootstrap.bundle.min.js' %}"></script>
+</body></html>

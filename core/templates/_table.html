@@ -1,0 +1,19 @@
+<div class="table-responsive"><table class="table table-sm align-middle bg-white border">
+<thead><tr><th>Food</th><th>Donor</th><th>Area</th><th>Portions</th><th>Collect before</th><th>Status</th><th></th></tr></thead><tbody>
+{% for d in rows %}<tr>
+<td>{{ d.food }}{% if mode == 'donor' or mode == 'ngo_mine' and d.confirmed %}<div class="small text-muted">{{ d.address }}</div>{% endif %}</td>
+<td>{{ d.donor.display_name }}{% if mode == 'ngo_mine' and d.confirmed %}<div class="small">Phone: {{ d.donor.phone }}</div>{% endif %}</td>
+<td>{{ d.area }}</td><td>{{ d.portions }}</td><td>{{ d.deadline|date:"j M, g:i A" }}</td>
+<td><span class="badge {{ d.badge }}">{{ d.label }}</span>
+{% if d.ngo %}<div class="small text-muted">{{ d.ngo.display_name }}{% if mode == 'donor' %} · Phone: {{ d.ngo.phone }}{% endif %}</div>{% endif %}</td>
+<td>
+{% if mode == 'ngo_open' %}<form method="post" action="{% url 'claim' d.pk %}">{% csrf_token %}<button class="btn btn-sm btn-success">Request</button></form>
+{% elif mode == 'ngo_mine' and d.state == 'pending' %}<span class="small text-muted">Waiting for donor</span>
+{% elif mode == 'ngo_mine' and d.status == 'requested' %}<form method="post" action="{% url 'collect' d.pk %}">{% csrf_token %}<button class="btn btn-sm btn-success">Mark collected</button></form>
+{% elif mode == 'donor' and d.state == 'pending' %}<div class="d-flex gap-1">
+<form method="post" action="{% url 'accept' d.pk %}">{% csrf_token %}<button class="btn btn-sm btn-success">Accept</button></form>
+<form method="post" action="{% url 'reject' d.pk %}">{% csrf_token %}<button class="btn btn-sm btn-outline-danger">Reject</button></form></div>
+{% elif mode == 'donor' and d.state == 'available' %}<form method="post" action="{% url 'cancel' d.pk %}">{% csrf_token %}<button class="btn btn-sm btn-outline-danger">Cancel</button></form>
+{% endif %}</td>
+</tr>{% empty %}<tr><td colspan="7" class="text-center text-muted py-4">Nothing here yet.</td></tr>{% endfor %}
+</tbody></table></div>

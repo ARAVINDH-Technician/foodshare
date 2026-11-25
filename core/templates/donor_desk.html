@@ -1,0 +1,4 @@
+{% extends "base.html" %}{% block content %}<h2>Donate surplus food</h2>
+<div class="alert alert-warning">Share only fresh food that is safe to eat. Never list spoiled, expired or wrongly stored food.</div>
+<form method="post" class="card card-body mb-4 col-lg-8">{% csrf_token %}{% include "_form.html" %}<button class="btn btn-success">Post donation</button></form>
+<h3 class="h5">Your donations</h3>{% include "_table.html" with mode="donor" %}{% endblock %}

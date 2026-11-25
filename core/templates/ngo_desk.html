@@ -1,0 +1,6 @@
+{% extends "base.html" %}{% block content %}<h2>NGO and volunteer desk</h2>
+{% if not user.verified %}<div class="alert alert-warning">Your organisation is awaiting admin verification. You can post food needs now and request food once verified.</div>{% endif %}
+<h3 class="h5">Available food</h3>{% include "_table.html" with mode="ngo_open" rows=open %}
+<h3 class="h5 mt-4">Your requests and collections</h3>{% include "_table.html" with mode="ngo_mine" rows=mine %}
+<h3 class="h5 mt-4">Post a food need</h3><form method="post" class="card card-body col-md-6 mb-3">{% csrf_token %}{% include "_form.html" %}<button class="btn btn-outline-success">Post need</button></form>
+{% for n in needs %}<form method="post" action="{% url 'close_need' n.pk %}" class="d-flex gap-2 align-items-center mb-1">{% csrf_token %}<span>{{ n.area }}: {{ n.meals }} meals</span><button class="btn btn-sm btn-link">Close</button></form>{% endfor %}{% endblock %}

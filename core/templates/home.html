@@ -1,0 +1,13 @@
+{% extends "base.html" %}{% block content %}
+<h1 class="display-6">Extra food from today’s event can feed someone tonight.</h1>
+<p class="text-muted col-md-8">Hotels, halls and colleges list safe surplus food. Verified NGOs request it and collect it. Nothing is delivered automatically; donor and NGO coordinate directly.</p>
+<div class="row g-2 my-3 text-center">
+<div class="col-6 col-md-3"><div class="card p-3 stat"><b>{{ stats.open }}</b>portions available now</div></div>
+<div class="col-6 col-md-3"><div class="card p-3 stat"><b>{{ stats.collected }}</b>meals collected</div></div>
+<div class="col-6 col-md-3"><div class="card p-3 stat"><b>{{ stats.donations }}</b>donations posted</div></div>
+<div class="col-6 col-md-3"><div class="card p-3 stat"><b>{{ stats.ngos }}</b>verified NGOs</div></div></div>
+<form class="row g-2 mb-3" method="get"><div class="col-auto"><select name="area" class="form-select"><option value="">All areas</option>{% for a in areas %}<option {% if a == area %}selected{% endif %}>{{ a }}</option>{% endfor %}</select></div>
+<div class="col-auto"><select name="status" class="form-select"><option value="">All statuses</option>
+<option value="available" {% if status == 'available' %}selected{% endif %}>Available</option><option value="requested" {% if status == 'requested' %}selected{% endif %}>Requested</option><option value="collected" {% if status == 'collected' %}selected{% endif %}>Collected</option><option value="expired" {% if status == 'expired' %}selected{% endif %}>Expired</option></select></div>
+<div class="col-auto"><button class="btn btn-success">Filter</button></div></form>
+{% include "_table.html" with mode="public" %}{% endblock %}
